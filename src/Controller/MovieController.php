@@ -7,7 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\OmdbApi;
-
+use App\Entity\Movie;
+use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class MovieController extends AbstractController
 {
@@ -31,11 +33,30 @@ class MovieController extends AbstractController
     }
 
     /**
+     * @Route("/movie/{imdbId}/import", name="movie_import", requirements={"id": "tt\d+"})
+     */
+    public function import(Movie $movie, OmdbApi $omdbApi, EntityManagerInterface $entityManager)
+    {
+        $movieData = $omdbApi->requestOneById($imdbId);
+        $movie = Movie::fromApi($movieData);
+
+        $entityManager->persist($movie);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('movie_latest');
+    }
+
+    /**
      * @Route("/movie/latest", name="movie_latest")
      */
-    public function latest()
+    public function latest(MovieRepository $movieRepository)
     {
-        return $this->render('movie/latest.html.twig');
+        $movieLimit = 10;
+        $movies = $movieRepository->findBy([], ['releaseDate' => 'DESC'], $movieLimit);
+
+        return $this->render('movie/latest.html.twig', [
+            'movies' => $movies,
+        ]);
     }
     
     /**
