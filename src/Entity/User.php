@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation as Api;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -20,6 +22,8 @@ class User
     private $id;
 
     /**
+     * @Api\Groups("user_list")
+     * @Api\SerializedName("surname")
      * @ORM\Column(type="string", length=50)
      */
     private $firstName;
@@ -30,6 +34,7 @@ class User
     private $lastName;
 
     /**
+     * @Api\Groups("user_list")
      * @Assert\Email(message="l'email saisie ({{ value }}) n'est pas un email correcte")
      * @ORM\Column(type="string", length=150, unique=true)
      */
@@ -41,6 +46,8 @@ class User
     private $phone;
 
     /**
+     * @Api\Groups("user_write")
+     * @ Api\Ignore()
      * @ORM\Column(type="string", length=255)
      */
     private $password;
@@ -51,6 +58,7 @@ class User
     }
 
     /**
+     * @Api\Ignore()
      * @Assert\IsTrue(message="Le mot de passe n'est pas valide")
      */
     public function isPasswordValid()
