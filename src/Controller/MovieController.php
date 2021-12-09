@@ -26,23 +26,29 @@ class MovieController extends AbstractController
     /**
      * @Route("/movie/{id}", name="movie_show", requirements={"id": "\d+"})
      */
-    public function show($id)
+    public function show(Movie $movie)
     {
-        return $this->render('movie/show.html.twig', []);
+        $this->denyAccessUnlessGranted('MOVIE_SHOW', $movie);
+        
+        return $this->render('movie/show.html.twig', [
+            'movie' => $movie
+        ]);
         //return new Response('Fiche du film ' . $id);
     }
 
     /**
      * @Route("/movie/{imdbId}/import", name="movie_import", requirements={"id": "tt\d+"})
      */
-    public function import(Movie $movie, OmdbApi $omdbApi, EntityManagerInterface $entityManager)
+    public function import($imdbId, OmdbApi $omdbApi, EntityManagerInterface $entityManager)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'You should be an ADMIN to have access to the import page');
+        
         $movieData = $omdbApi->requestOneById($imdbId);
         $movie = Movie::fromApi($movieData);
 
         $entityManager->persist($movie);
         $entityManager->flush();
-        
+
         return $this->redirectToRoute('movie_latest');
     }
 

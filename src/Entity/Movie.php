@@ -150,12 +150,12 @@ class Movie
         return $this;
     }
 
-    public function getImdbRating(): ?float
+    public function getImdbRating()
     {
         return $this->imdbRating;
     }
 
-    public function setImdbRating(?float $imdbRating): self
+    public function setImdbRating($imdbRating): self
     {
         $this->imdbRating = $imdbRating;
 
@@ -165,6 +165,10 @@ class Movie
     public static function fromApi(array $movieInfo): self
     {
         $movie = new self();
+        
+        if (!is_float($movieInfo['imdbRating'])) {
+            $movieInfo['imdbRating'] = 0;
+        }
 
         $movie
             ->setTitle($movieInfo['Title'])
