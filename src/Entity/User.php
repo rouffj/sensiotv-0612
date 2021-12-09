@@ -61,6 +61,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
     /**
      * @Api\Ignore()
      * @Assert\IsTrue(message="Le mot de passe n'est pas valide")

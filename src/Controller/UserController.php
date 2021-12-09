@@ -42,12 +42,4 @@ class UserController extends AbstractController
             'userForm' => $userForm->createView(),
         ]);
     }
-
-    /**
-     * @Route("/login", name="user_signin")
-     */
-    public function signin(): Response
-    {
-        return $this->render('user/signin.html.twig');
-    }
 }
