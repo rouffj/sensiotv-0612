@@ -11,13 +11,15 @@ use App\Form\UserType;
 use Symfony\Component\Form\Extension\Core\Type as Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Event\UserRegisteredEvent;
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, EventDispatcherInterface $eventDispatcher): Response
     {
         $user = new User();
         $userForm = $this->createForm(UserType::class, $user);
@@ -36,6 +38,8 @@ class UserController extends AbstractController
             $entityManager->flush();
             dump($user);
             # Insert in DB
+            
+            $eventDispatcher->dispatch(new UserRegisteredEvent($user), 'user_registered');
         }
 
         return $this->render('user/register.html.twig', [
