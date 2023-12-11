@@ -139,6 +139,11 @@ class User  implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstName;
     }
 
+    public function getBirthday(): \DateTime
+    {
+        return new \DateTime('01-01-2000');
+    }
+
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;

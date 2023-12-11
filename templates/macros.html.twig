@@ -55,7 +55,12 @@
             </a>
         </div>
         <div class="col-lg-9">
-            <a href="/movie/{{ movie.id }}" title="Click to see the movie details"><h6 class="m-1 font-weight-bold">{{ movie.title }}</h6></a>
+            {% if is_granted('MOVIE_VIEW', movie) %}
+                <a href="/movie/{{ movie.id }}" title="Click to see the movie details"><h6 class="m-1 font-weight-bold">{{ movie.title }}</h6></a>
+            {% else %}
+                <h6 class="m-1 font-weight-bold">{{ movie.title }}</h6> (You are too young to watch this movie).
+            {% endif %}
+
             <small class="text-success font-weight-bold m-1">{{ movie.releaseDate|date('Y-m-d') }}</small>
             <p class="ml-1 mr-1 mt-3 mb-2"><span class="text-muted">{{ movie.plot }}</span></p>
         </div>
