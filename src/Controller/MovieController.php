@@ -35,7 +35,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movie/{imdbId}/import", name="movie_import", requirements={"id": "tt\d+"})
      */
-    public function import(Movie $movie, OmdbApi $omdbApi, EntityManagerInterface $entityManager)
+    public function import(string $imdbId, OmdbApi $omdbApi, EntityManagerInterface $entityManager)
     {
         $movieData = $omdbApi->requestOneById($imdbId);
         $movie = Movie::fromApi($movieData);
