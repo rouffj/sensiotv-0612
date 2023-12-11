@@ -11,6 +11,8 @@ use App\Entity\Movie;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 class MovieController extends AbstractController
 {
     /**
@@ -35,7 +37,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/movie/{imdbId}/import", name="movie_import", requirements={"id": "tt\d+"})
      */
-    public function import(string $imdbId, OmdbApi $omdbApi, EntityManagerInterface $entityManager)
+    public function import(string $imdbId, OmdbApi $omdbApi, EntityManagerInterface $entityManager, HttpClientInterface $httpClient)
     {
         $movieData = $omdbApi->requestOneById($imdbId);
         $movie = Movie::fromApi($movieData);

@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     db_password: myPassword
+    
 
 services:
     # default configuration for services in *this* file
@@ -15,6 +16,7 @@ services:
         # Option 3: Permet d'éviter la déclaration partielle.
         bind:
             $omdbToken: '%env(OMDB_TOKEN)%'
+            $license: '%env(key:license:json:file:resolve:SECRET_FILE)%'
             $omdbHost: https://www.omdbapi.com
 
     # makes classes in src/ available to be used as services
@@ -29,6 +31,45 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+    #$container->get('Omdb')
+    # option 1: déclaration explicite
+    #App\Service\OmdbApi:
+    #  class: App\Service\OmdbApi
+    #  arguments:
+    #    $omdbHost: https://www.omdbapi.com
+    #    $omdbToken: '28c5b7b1'
+    #    $omdbClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
+    
+    
+    # option 2: déclaration partielle
+    #App\Service\OmdbApi:
+    #  arguments:
+    #    $omdbToken: '28c5b7b1'
+    #    $omdbHost: https://www.omdbapi.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     #App\MyService:
     #    arguments:
