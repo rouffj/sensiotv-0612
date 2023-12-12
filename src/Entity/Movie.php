@@ -57,6 +57,30 @@ class Movie
      */
     private $imdbRating;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $marking;
+
+    /**
+     * @return mixed
+     */
+    public function getMarking(): ?string
+    {
+        return $this->marking;
+    }
+
+    /**
+     * @param mixed $marking
+     * @return Movie
+     */
+    public function setMarking(string $marking)
+    {
+        $this->marking = $marking;
+
+        return $this;
+    }
+
     public function __construct()
     {
     }

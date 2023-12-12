@@ -63,6 +63,23 @@
 
             <small class="text-success font-weight-bold m-1">{{ movie.releaseDate|date('Y-m-d') }}</small>
             <p class="ml-1 mr-1 mt-3 mb-2"><span class="text-muted">{{ movie.plot }}</span></p>
+
+            <p>current status: {{ movie.marking|default('imported') }}</p>
+
+            {{ dump(workflow_transition_blockers(movie, 'to_publish')) }}
+
+            {% if workflow_can(movie, 'to_imported') %}
+                <a class="btn btn-primary btn-xs" href="{{ path('change_movie_status', {id: movie.id, status: 'to_imported'}) }}">reset status</a>
+            {% endif %}
+            {% if workflow_can(movie, 'to_review') %}
+            <a class="btn btn-primary btn-xs" href="{{ path('change_movie_status', {id: movie.id, status: 'to_review'}) }}">reviewed</a>
+            {% endif %}
+            {% if workflow_can(movie, 'to_press_review') %}
+            <a class="btn btn-primary btn-xs" href="{{ path('change_movie_status', {id: movie.id, status: 'to_press_review'}) }}">press review done</a>
+            {% endif %}
+            {% if workflow_can(movie, 'to_publish') %}
+            <a class="btn btn-primary btn-xs" href="{{ path('change_movie_status', {id: movie.id, status: 'to_publish'}) }}">published</a>
+            {% endif %}
         </div>
     </div>
     <hr />

@@ -1,0 +1,15 @@
+digraph workflow {
+  ratio="compress" rankdir="LR" label=""
+  node [fontsize="9" fontname="Arial" color="#333333" fillcolor="lightblue" fixedsize="false" width="1"];
+  edge [fontsize="9" fontname="Arial" color="#333333" arrowhead="normal" arrowsize="0.5"];
+
+  place_a671a412ad5a5208f0c3501753914eea14efc15f [label="imported", shape=circle style="filled"];
+  place_b56f08775db75495b47fcebe192b46a1ddbf6416 [label="reviewed", shape=circle];
+  place_194c2fb778a9ab2014e1dc26118b232a21e29dcf [label="press_review_done", shape=circle];
+  place_c2807535f28e44fe6c7375dcf90518115529a8fa [label="published", shape=circle];
+  place_a671a412ad5a5208f0c3501753914eea14efc15f -> place_b56f08775db75495b47fcebe192b46a1ddbf6416 [label="to_review" style="solid"];
+  place_b56f08775db75495b47fcebe192b46a1ddbf6416 -> place_194c2fb778a9ab2014e1dc26118b232a21e29dcf [label="to_press_review" style="solid"];
+  place_b56f08775db75495b47fcebe192b46a1ddbf6416 -> place_c2807535f28e44fe6c7375dcf90518115529a8fa [label="to_publish" style="solid"];
+  place_194c2fb778a9ab2014e1dc26118b232a21e29dcf -> place_c2807535f28e44fe6c7375dcf90518115529a8fa [label="to_publish" style="solid"];
+}
+

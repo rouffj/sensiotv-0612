@@ -1,0 +1,29 @@
+framework:
+    workflows:
+        movie_publishing:
+            type: state_machine
+            supports: App\Entity\Movie
+            places:
+                - imported
+                - reviewed # internal review
+                - press_review_done
+                - published
+            initial_marking: imported
+            transitions:
+                to_review:
+                    from: imported
+                    to: reviewed
+                to_press_review:
+                    from: reviewed
+                    to: press_review_done
+                to_publish:
+                    from: [press_review_done, reviewed]
+                    to: published
+                    metadata:
+                        title_length: 30
+                        explanation: '@@Please use a longer movie title'
+
+                to_imported: # reset status
+                    from: [reviewed, press_review_done, published]
+                    to: imported
+

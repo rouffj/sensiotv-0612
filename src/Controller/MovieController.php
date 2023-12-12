@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+use Symfony\Component\Workflow\WorkflowInterface;
+
 class MovieController extends AbstractController
 {
     /**
@@ -74,5 +76,24 @@ class MovieController extends AbstractController
             'movies' => $movies['Search'],
             'keyword' => $keyword,
         ]);
+    }
+
+    /**
+     * @Route("/movie/{id}/to_status/{status}", name="change_movie_status")
+     */
+    public function changeStatus(Movie $movie, string $status, WorkflowInterface $moviePublishingStateMachine, EntityManagerInterface $entityManager)
+    {
+        try {
+            $moviePublishingStateMachine->apply($movie, $status);
+        } catch (\Exception $e) {
+            dump($e);
+
+            throw $e;
+        }
+
+        dump($movie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('movie_latest');
     }
 }
