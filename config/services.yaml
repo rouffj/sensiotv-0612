@@ -32,6 +32,11 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\EventListener\UserRegistrationListener:
+        tags:
+            # the tag's name asks symfony to register the class as an event_listener
+            # event: is the name of event you want to subscribe to
+            - { name: kernel.event_listener, event: 'app.user_registration_completed', method: onRegistration }
 
     #$container->get('Omdb')
     # option 1: déclaration explicite

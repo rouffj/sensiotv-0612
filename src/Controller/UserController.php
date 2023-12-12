@@ -11,20 +11,24 @@ use App\Form\UserType;
 use Symfony\Component\Form\Extension\Core\Type as Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Event\UserRegistrationCompleted;
+use App\Event\AppDomainEvents;
+
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/register", name="user_register")
      */
-    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, EventDispatcherInterface $eventDispatcher): Response
     {
         $user = new User();
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->add('submit', Type\SubmitType::class, [
             'label' => 'Create your SensioTV account'
         ]);
-            
+
         $userForm->handleRequest($request);
         
         if ($userForm->isSubmitted() && $userForm->isValid()) {
@@ -35,6 +39,9 @@ class UserController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $eventDispatcher->dispatch(new UserRegistrationCompleted($user), AppDomainEvents::USER_REGISTRATION_COMPLETED);
+
             dump($user);
             # Insert in DB
         }
